@@ -1,4 +1,5 @@
 import pandas as pd
+from options.enums import ImputationMethodType, ImputationMethod
 
 
 class DataManipulation:
@@ -44,7 +45,7 @@ class DataManipulation:
 
         method_type = self._opt.missing_values_imputation_method
 
-        if method_type == "imputation_dictionary":
+        if method_type == ImputationMethodType.IMPUTATION_DICTIONARY:
             self._logger.info(
                 "Imputing missing values using imputation dictionary method."
             )
@@ -53,17 +54,21 @@ class DataManipulation:
 
             try:
                 for column, (method, fill_value) in imputation_dict.items():
-                    if method == "mean":
+
+                    if method == ImputationMethod.MEAN:
                         self.data[column].fillna(self.data[column].mean(), inplace=True)
-                    elif method == "median":
+
+                    elif method == ImputationMethod.MEDIAN:
                         self.data[column].fillna(
                             self.data[column].median(), inplace=True
                         )
-                    elif method == "mode":
+
+                    elif method == ImputationMethod.MODE:
                         self.data[column].fillna(
                             self.data[column].mode()[0], inplace=True
                         )
-                    elif method == "fillna":
+
+                    elif method == ImputationMethod.FILLNA:
                         if fill_value is None:
                             raise ValueError(
                                 "fill_value must be provided when using 'fillna' method."
@@ -76,18 +81,22 @@ class DataManipulation:
             except Exception as e:
                 raise ValueError(f"Error occurred during missing value imputation: {e}")
 
-        elif method_type == "global_imputation":
+        elif method_type == ImputationMethodType.GLOBAL_IMPUTATION:
 
             self._logger.info("Imputing missing values using global imputation method.")
 
             try:
-                if self._opt.global_imputation_method == "mean":
+                if self._opt.global_imputation_method == ImputationMethod.MEAN:
                     self.data.fillna(self.data.mean(), inplace=True)
-                elif self._opt.global_imputation_method == "median":
+
+                elif self._opt.global_imputation_method == ImputationMethod.MEDIAN:
                     self.data.fillna(self.data.median(), inplace=True)
-                elif self._opt.global_imputation_method == "mode":
+
+                elif self._opt.global_imputation_method == ImputationMethod.MODE:
                     self.data.fillna(self.data.mode().iloc[0], inplace=True)
-                elif self._opt.global_imputation_method == "fillna":
+
+                elif self._opt.global_imputation_method == ImputationMethod.FILLNA:
+
                     if self._opt.global_fill_value is None:
                         raise ValueError(
                             "fill_value must be provided when using 'fillna' method."

@@ -1,1 +1,1 @@
-# Karthi-DStech-ML-Framework-for-Deployment-using-Fast-API-and-MLFlow
+# ML-Framework-for-Deployment-using-MLFlow
